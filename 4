@@ -1,0 +1,48 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_boston
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+# Load the Boston Housing dataset
+boston = load_boston()
+X = boston.data[:, np.newaxis, 5]  # Using just one feature for simplicity (RM: average number of rooms)
+y = boston.target
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Fit linear regression model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Calculate cross-deviation and deviation about x
+y_pred = model.predict(X_test)
+cross_deviation = np.mean((y_pred - y_test) ** 2)
+deviation_x = np.mean((X_test - np.mean(X_test)) ** 2)
+
+# Estimate regression coefficients
+slope = model.coef_[0]
+intercept = model.intercept_
+
+# Function to show plot and regression line
+def plot_regression_line(X, y, y_pred):
+    plt.scatter(X, y, color='blue')
+    plt.plot(X, y_pred, color='red')
+    plt.title('Linear Regression')
+    plt.xlabel('Average Number of Rooms (RM)')
+    plt.ylabel('House Price')
+    plt.show()
+
+# Plotting regression line
+plot_regression_line(X_test, y_test, y_pred)
+
+# Print regression coefficients
+print("Regression Coefficients:")
+print("Slope (Coefficient):", slope)
+print("Intercept:", intercept)
+
+# Print cross-deviation and deviation about x
+print("Cross-deviation:", cross_deviation)
+print("Deviation about x:", deviation_x)
