@@ -1,0 +1,33 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+# Step 1: Load the dataset
+dataset = pd.read_csv("/content/IRIS.csv")
+
+# Assuming 'Class' column contains the labels and other columns are features
+
+# Step 2: Split the data into features and labels
+X = dataset.drop('Class', axis=1)
+y = dataset['Class']
+
+# Step 3: Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Step 4: Feature Scaling
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Step 5: Train the KNN classifier
+classifier = KNeighborsClassifier(n_neighbors=5)  # You can adjust the number of neighbors
+classifier.fit(X_train, y_train)
+
+# Step 6: Predict the labels for the test set
+y_pred = classifier.predict(X_test)
+
+# Step 7: Evaluate the accuracy of the model
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
