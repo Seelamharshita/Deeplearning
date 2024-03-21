@@ -1,0 +1,54 @@
+import numpy as np
+
+# Actual data
+X = np.array([1, 2, 3, 4, 5])
+y = np.array([2, 4, 6, 8, 10])
+
+# Calculating the loss or cost
+def calculate_cost(y_true, y_pred):
+    return np.mean((y_true - y_pred) ** 2)
+
+# Gradient Descent Function
+def gradient_descent(X, y, iterations, learning_rate, stopping_threshold):
+    # Initialize parameters
+    w = 0.0  # weight
+    b = 0.0  # bias
+    
+    # Iterate for a fixed number of iterations
+    for i in range(iterations):
+        # Predicted values
+        y_pred = w * X + b
+        
+        # Calculate gradients
+        dw = (-2/len(X)) * np.sum(X * (y - y_pred))  # derivative with respect to weight
+        db = (-2/len(X)) * np.sum(y - y_pred)        # derivative with respect to bias
+        
+        # Update parameters
+        w -= learning_rate * dw
+        b -= learning_rate * db
+        
+        # Calculate current loss
+        loss = calculate_cost(y, y_pred)
+        
+        # Check for convergence
+        if loss < stopping_threshold:
+            print(f"Converged after {i} iterations")
+            break
+        
+        # Print loss every 100 iterations
+        if i % 100 == 0:
+            print(f"Iteration {i}, Loss: {loss}")
+    
+    return w, b
+
+# Hyperparameters
+iterations = 1000
+learning_rate = 0.01
+stopping_threshold = 0.01
+
+# Estimation of optimal parameters
+optimal_w, optimal_b = gradient_descent(X, y, iterations, learning_rate, stopping_threshold)
+
+print("Optimal parameters:")
+print("Weight:", optimal_w)
+print("Bias:", optimal_b)
